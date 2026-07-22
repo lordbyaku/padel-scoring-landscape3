@@ -15,7 +15,7 @@
     <!-- Akhir PWA Meta Tags -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&family=Russo+One&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -291,8 +291,8 @@
       }
 
       .set-cell {
-        font-family: "Anton", sans-serif;
-        font-size: clamp(46px, 17vw, 72px);
+        font-family: "Russo One", sans-serif;
+        font-size: clamp(40px, 12vw, 64px);
         color: rgba(255, 255, 255, 0.25);
         text-shadow:
           0 1px 0 rgba(255, 255, 255, 0.15),
@@ -326,8 +326,8 @@
       }
 
       .tb-cell {
-        font-family: "Anton", sans-serif;
-        font-size: clamp(46px, 17vw, 72px);
+        font-family: "Russo One", sans-serif;
+        font-size: clamp(40px, 12vw, 64px);
         color: rgba(255, 255, 255, 0.18);
         text-shadow:
           0 1px 0 rgba(255, 255, 255, 0.1),
@@ -345,8 +345,10 @@
       }
 
       .points-cell {
-        font-family: "Anton", sans-serif;
-        font-size: clamp(84px, 17vw, 72px);
+        font-family: "Russo One", sans-serif;
+        font-size: clamp(72px, 16vw, 96px);
+        line-height: 1;
+        letter-spacing: 1px;
         color: #fff;
         min-width: auto;
         text-align: center;
@@ -447,9 +449,9 @@
       .side-btn {
         border: none;
         border-radius: 18px;
-        width: auto;
-        min-width: 58px;
-        max-width: 130px;
+        width: 95px;
+        min-width: 95px;
+        max-width: 140px;
         flex-shrink: 0;
         display: flex;
         flex-direction: column;
@@ -457,12 +459,12 @@
         justify-content: center;
         gap: 6px;
         font-family: "Inter", sans-serif;
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 700;
         letter-spacing: 0.2px;
         color: #1a1330;
         cursor: pointer;
-        padding: 10px 10px;
+        padding: 10px 12px;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
         transition:
           transform 0.08s,
@@ -598,6 +600,42 @@
         flex-shrink: 0;
       }
 
+      .fullscreen-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        padding: 13px 18px;
+        border-radius: 14px;
+        font-family: "Inter", sans-serif;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        margin-top: 10px;
+        box-shadow:
+          0 6px 18px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        transition:
+          transform 0.12s,
+          box-shadow 0.12s;
+      }
+      .fullscreen-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      }
+      .fullscreen-btn:active {
+        transform: translateY(0);
+      }
+      .fullscreen-btn svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+
       @media (max-width: 380px) {
         .points-cell {
           padding: 6px 4px;
@@ -609,7 +647,8 @@
           gap: 10px;
         }
         .side-btn {
-          min-width: 50px;
+          width: 70px;
+          min-width: 70px;
           max-width: 100px;
           padding: 8px 6px;
           gap: 4px;
@@ -623,18 +662,17 @@
       }
 
       /* ===== Landscape phone: satu kolom (persis seperti desktop), hanya diperkecil agar muat di layar ===== */
-      /* ===== Landscape phone: satu kolom (persis seperti desktop), hanya diperkecil agar muat di layar ===== */
       @media (orientation: landscape) and (max-height: 520px) {
         body {
-          padding: 8px 12px 10px;
+          padding: 4px 8px 4px;
         }
         .app {
           max-width: 640px;
         }
 
         header.glass {
-          padding: 6px 14px;
-          margin-bottom: 8px;
+          padding: 4px 14px;
+          margin-bottom: 4px;
         }
         .brand-logo {
           width: min(140px, 45%);
@@ -642,108 +680,94 @@
         header p {
           font-size: 8.5px;
           letter-spacing: 2px;
-          margin-top: 4px;
-        }
-
-        .toggles-row.glass {
-          margin-bottom: 8px;
-          padding: 5px 14px;
-          font-size: 10.5px;
-          gap: 12px;
-        }
-
-        .board-row {
-          margin-bottom: 8px;
-          gap: 6px;
-        }
-        .board.glass {
-          padding: 3px 6px;
-        }
-        .team-col {
-          padding: 6px 6px;
-          gap: 5px;
-        }
-        .team-stats {
-          gap: 5px;
-        }
-        .name-input {
-          font-size: 12px;
-          padding: 2px 2px;
-        }
-
-        /* ----- PERUBAHAN UTAMA: FONT POIN & SET DIBESARKAN ----- */
-        .points-cell {
-          font-size: clamp(
-            30px,
-            12vw,
-            70px
-          ); /* Angka poin diperbesar drastis */
-          padding: 2px 3px;
-          border-radius: 4px;
-        }
-        .set-cell,
-        .tb-cell {
-          font-size: clamp(
-            28px,
-            8vw,
-            40px
-          ); /* Angka set & TB ikut dibesarkan */
-        }
-        .stat-label {
-          font-size: 9px;
-          letter-spacing: 1px;
-        }
-        /* ------------------------------------------------------- */
-
-        .side-btn {
-          min-width: 40px;
-          max-width: 100px;
-          padding: 6px 6px;
-          border-radius: 12px;
-          gap: 3px;
-        }
-        .side-btn .plus {
-          font-size: 15px;
-        }
-        .side-btn .tname {
-          font-size: 7.5px;
-        }
-        .leaves {
-          font-size: 10px;
           margin-top: 2px;
         }
 
-        .controls {
-          margin-bottom: 8px;
+        .toggles-row.glass {
+          margin-bottom: 4px;
+          padding: 4px 10px;
+          font-size: 10.5px;
           gap: 8px;
         }
-        .ctrl-btn {
-          padding: 6px 6px;
-          font-size: 10.5px;
+
+        .board-row {
+          margin-bottom: 4px;
+          gap: 4px;
         }
-        .status.glass {
-          margin-bottom: 8px;
-          padding: 6px 10px;
-          font-size: 10.5px;
+        .board.glass {
+          padding: 2px 4px;
         }
-        .log-panel.glass {
-          padding: 8px 10px;
-          margin-bottom: 8px;
+        .team-col {
+          padding: 4px 4px;
+          gap: 3px;
         }
-        .log-panel h3 {
-          margin: 0 0 6px;
+        .team-stats {
+          gap: 3px;
+        }
+        .name-input {
+          font-size: 10px;
+          padding: 1px 2px;
+        }
+
+        .points-cell {
+          font-size: clamp(42px, 14vw, 84px);
+          line-height: 1;
+          padding: 4px 6px;
+          border-radius: 8px;
+        }
+        .set-cell,
+        .tb-cell {
+          font-size: clamp(24px, 8vw, 38px);
+        }
+        .stat-label {
+          font-size: 8px;
+          letter-spacing: 1px;
+        }
+
+        .side-btn {
+          width: 80px;
+          min-width: 80px;
+          max-width: 120px;
+          padding: 6px 8px;
+          border-radius: 14px;
+          gap: 3px;
+        }
+        .side-btn .plus {
+          font-size: 17px;
+        }
+        .side-btn .tname {
           font-size: 9.5px;
         }
-        .log-list {
-          max-height: 70px;
+        .leaves {
+          font-size: 9px;
+          margin-top: 1px;
         }
-        .log-list li {
+
+        .controls {
+          margin-bottom: 4px;
+          gap: 6px;
+        }
+        .ctrl-btn {
           padding: 5px 4px;
-          font-size: 10.5px;
+          font-size: 10px;
         }
+
+        .status.glass {
+          display: none;
+        }
+        .log-panel.glass {
+          display: none;
+        }
+
         .export-btn {
-          padding: 8px 14px;
-          font-size: 11px;
+          padding: 6px 12px;
+          font-size: 10px;
+          margin-top: 0;
+        }
+        .fullscreen-btn {
+          padding: 6px 12px;
+          font-size: 10px;
+          margin-top: 4px;
         }
       }
     </style>
@@ -892,6 +916,23 @@ TIM B</textarea
             />
           </svg>
           <span>Export Excel</span>
+        </button>
+
+        <button class="fullscreen-btn" id="fullscreenBtn" title="Fullscreen">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 4h5M4 4v5M20 4h-5M20 4v5M4 20h5M4 20v-5M20 20h-5M20 20v-5"
+              stroke="#fff"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Fullscreen</span>
         </button>
       </div>
     </div>
@@ -1442,6 +1483,14 @@ TIM B</textarea
         });
         els.exportBtn.addEventListener("click", exportToExcel);
 
+        document.getElementById("fullscreenBtn").addEventListener("click", function () {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+          } else {
+            document.exitFullscreen();
+          }
+        });
+
         // --- FIX: Deteksi perubahan layar (potrait/landscape) agar teks dikalkulasi ulang dan tidak kepotong ---
         window.addEventListener("resize", function () {
           autoResize(els.nameA);
@@ -1467,8 +1516,5 @@ TIM B</textarea
         });
       }
     </script>
-  </body>
-</html>
-
   </body>
 </html>
