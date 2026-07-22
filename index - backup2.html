@@ -921,62 +921,6 @@ TIM B</textarea
 
     <script>
       (function () {
-        const DB_NAME = "MaplePadelDB";
-        const STORE_NAME = "stateStore";
-        const KEY_NAME = "currentMatch";
-
-        function getDB() {
-          return new Promise((resolve, reject) => {
-            const request = indexedDB.open(DB_NAME, 1);
-            request.onupgradeneeded = (e) => {
-              const db = e.target.result;
-              if (!db.objectStoreNames.contains(STORE_NAME)) {
-                db.createObjectStore(STORE_NAME);
-              }
-            };
-            request.onsuccess = (e) => resolve(e.target.result);
-            request.onerror = (e) => reject(e.target.error);
-          });
-        }
-
-        async function saveToDB(appState, stack) {
-          try {
-            const db = await getDB();
-            const tx = db.transaction(STORE_NAME, "readwrite");
-            const store = tx.objectStore(STORE_NAME);
-            store.put({ state: appState, undoStack: stack }, KEY_NAME);
-          } catch (err) {
-            console.error("Gagal menyimpan ke IndexedDB:", err);
-          }
-        }
-
-        async function loadFromDB() {
-          try {
-            const db = await getDB();
-            return new Promise((resolve, reject) => {
-              const tx = db.transaction(STORE_NAME, "readonly");
-              const store = tx.objectStore(STORE_NAME);
-              const request = store.get(KEY_NAME);
-              request.onsuccess = () => resolve(request.result);
-              request.onerror = () => reject(request.error);
-            });
-          } catch (err) {
-            console.error("Gagal membaca dari IndexedDB:", err);
-            return null;
-          }
-        }
-
-        async function clearDB() {
-          try {
-            const db = await getDB();
-            const tx = db.transaction(STORE_NAME, "readwrite");
-            const store = tx.objectStore(STORE_NAME);
-            store.delete(KEY_NAME);
-          } catch (err) {
-            console.error("Gagal menghapus data IndexedDB:", err);
-          }
-        }
-
         const els = {
           nameA: document.getElementById("nameA"),
           nameB: document.getElementById("nameB"),
@@ -1378,8 +1322,6 @@ TIM B</textarea
             .slice(0, 40)
             .map((l) => `<li>${escapeHtml(l)}</li>`)
             .join("");
-
-          saveToDB(state, undoStack);
         }
 
         function setFlip(el, val, key) {
@@ -1523,29 +1465,11 @@ TIM B</textarea
         });
         els.exportBtn.addEventListener("click", exportToExcel);
 
-        let isExitingApproved = false;
-
         document.getElementById("fullscreenBtn").addEventListener("click", function () {
           if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(() => {});
           } else {
-            if (confirm("Apakah Anda yakin ingin keluar dari Fullscreen?")) {
-              isExitingApproved = true;
-              document.exitFullscreen();
-            }
-          }
-        });
-
-        document.addEventListener("fullscreenchange", function () {
-          if (!document.fullscreenElement) {
-            if (!isExitingApproved) {
-              if (confirm("Apakah Anda yakin ingin keluar dari Fullscreen?")) {
-                isExitingApproved = true;
-              } else {
-                document.documentElement.requestFullscreen().catch(() => {});
-              }
-            }
-            isExitingApproved = false;
+            document.exitFullscreen();
           }
         });
 
@@ -1556,22 +1480,9 @@ TIM B</textarea
         });
         // -------------------------------------------------------------------------------------------------------
 
-        loadFromDB().then((data) => {
-          if (data && data.state) {
-            state = data.state;
-            undoStack = data.undoStack || [];
-            els.nameA.value = state.teamA || "TIM A";
-            els.nameB.value = state.teamB || "TIM B";
-          }
-          autoResize(els.nameA);
-          autoResize(els.nameB);
-          render();
-        }).catch((err) => {
-          console.error("Gagal memuat state dari DB:", err);
-          autoResize(els.nameA);
-          autoResize(els.nameB);
-          render();
-        });
+        autoResize(els.nameA);
+        autoResize(els.nameB);
+        render();
       })();
     </script>
 <script>
