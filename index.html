@@ -171,14 +171,15 @@
       .teams-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        position: relative;
       }
       .team-col {
         display: flex;
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 16px;
-        padding: 18px 12px;
+        gap: 10px;
+        padding: 14px 10px;
       }
       .team-col.team-a {
         border-right: 1px solid rgba(255, 255, 255, 0.15);
@@ -227,7 +228,7 @@
         color: var(--text);
         font-family: "Inter", sans-serif;
         font-weight: 800;
-        font-size: 16px;
+        font-size: 20px;
         padding: 4px 2px;
         width: 100%;
         max-width: 100%;
@@ -259,7 +260,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 14px;
+        gap: 8px;
         width: 100%;
       }
       .stat-box {
@@ -353,7 +354,7 @@
           rgba(103, 232, 249, 0.04) 100%
         );
         border-radius: 12px;
-        padding: 6px 6px;
+        padding: 3px 6px;
         border: 1px solid rgba(103, 232, 249, 0.2);
         box-shadow:
           inset 0 2px 0 rgba(255, 255, 255, 0.15),
@@ -481,6 +482,50 @@
         cursor: not-allowed;
         box-shadow: none;
         transform: none;
+      }
+
+      .switch-side-btn {
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: #fff;
+        border-radius: 14px;
+        padding: 6px 10px;
+        font-family: "Inter", sans-serif;
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+        transition: transform 0.15s, background 0.15s, box-shadow 0.15s;
+        user-select: none;
+      }
+      .switch-side-btn:hover {
+        background: rgba(255, 255, 255, 0.32);
+        transform: translate(-50%, -50%) scale(1.08);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+      }
+      .switch-side-btn:active {
+        transform: translate(-50%, -50%) scale(0.95);
+      }
+      .switch-side-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+      .switch-side-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        transform: translate(-50%, -50%);
       }
 
       .controls {
@@ -620,13 +665,21 @@
 
       @media (max-width: 380px) {
         .points-cell {
-          padding: 6px 4px;
+          padding: 3px 4px;
         }
         .name-input {
-          font-size: 13px;
+          font-size: 16px;
         }
         .team-stats {
-          gap: 10px;
+          gap: 6px;
+        }
+        .switch-side-btn {
+          padding: 4px 6px;
+          font-size: 8px;
+        }
+        .switch-side-btn svg {
+          width: 14px;
+          height: 14px;
         }
         .side-btn {
           width: 70px;
@@ -687,7 +740,7 @@
           gap: 3px;
         }
         .name-input {
-          font-size: 15px;
+          font-size: 18px;
           padding: 1px 2px;
         }
 
@@ -807,6 +860,28 @@ TIM A</textarea
                   </div>
                 </div>
               </div>
+
+              <!-- Tombol Switch Side di Tengah Papan Skor -->
+              <button
+                id="switchSideBtn"
+                class="switch-side-btn"
+                title="Tukar Sisi (Pindah Lapangan)"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M7 16l-4-4 4-4" />
+                  <path d="M3 12h18" />
+                  <path d="M17 8l4 4-4 4" />
+                </svg>
+                <span>TUKAR SISI</span>
+              </button>
+
               <div class="team-col team-b">
                 <div class="team-left">
                   <span
@@ -1002,6 +1077,7 @@ TIM B</textarea
           setB: document.getElementById("setB"),
           tbA: document.getElementById("tbA"),
           tbB: document.getElementById("tbB"),
+          switchSideBtn: document.getElementById("switchSideBtn"),
         };
 
         function freshState(teamA, teamB, golden) {
@@ -1363,6 +1439,7 @@ TIM B</textarea
 
           els.btnA.disabled = state.matchOver;
           els.btnB.disabled = state.matchOver;
+          if (els.switchSideBtn) els.switchSideBtn.disabled = state.matchOver;
 
           // Terapkan fungsi pemotong nama ke tombol +1
           els.btnAName.textContent = formatBtnName(teamName("A"));
@@ -1504,8 +1581,54 @@ TIM B</textarea
         });
         // ---------------------------------------------------------------------------------
 
+        function switchSides() {
+          if (state.matchOver) return;
+          snapshot();
+
+          const tempTeamA = state.teamA;
+          state.teamA = state.teamB;
+          state.teamB = tempTeamA;
+
+          const tempGames = state.games.A;
+          state.games.A = state.games.B;
+          state.games.B = tempGames;
+
+          const tempPoints = state.points.A;
+          state.points.A = state.points.B;
+          state.points.B = tempPoints;
+
+          const tempTB = state.tieBreakPoints.A;
+          state.tieBreakPoints.A = state.tieBreakPoints.B;
+          state.tieBreakPoints.B = tempTB;
+
+          const tempSets = state.setsWon.A;
+          state.setsWon.A = state.setsWon.B;
+          state.setsWon.B = tempSets;
+
+          state.server = state.server === "A" ? "B" : "A";
+
+          if (state.winner) {
+            state.winner = state.winner === "A" ? "B" : "A";
+          }
+
+          if (state.setHistory && state.setHistory.length > 0) {
+            state.setHistory = state.setHistory.map((h) => ({ A: h.B, B: h.A }));
+          }
+
+          els.nameA.value = state.teamA;
+          els.nameB.value = state.teamB;
+          autoResize(els.nameA);
+          autoResize(els.nameB);
+
+          state.log.unshift("🔄 Tukar Sisi / Pindah Lapangan");
+          render();
+        }
+
         els.btnA.addEventListener("click", () => addPoint("A"));
         els.btnB.addEventListener("click", () => addPoint("B"));
+        if (els.switchSideBtn) {
+          els.switchSideBtn.addEventListener("click", switchSides);
+        }
         els.undoBtn.addEventListener("click", undo);
         els.resetBtn.addEventListener("click", resetMatch);
         els.goldenToggle.addEventListener("change", (e) => {
